@@ -11,6 +11,6 @@ namespace BTZTransportesAPI.Models
         public required string Fabricante { get; set; }
         public required int AnoFabricacao { get; set; }
         public required double CapacidadeTanque { get; set; }
-        public required string Observacoes { get; set; }
+        public string Observacoes { get; set; }
     }
 }
