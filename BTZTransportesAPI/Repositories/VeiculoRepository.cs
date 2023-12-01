@@ -92,7 +92,7 @@ namespace BTZTransportesAPI.Repositories
                                 ano_fabricacao as AnoFabricacao,
                                 capacidade_tanque as CapacidadeTanque,
                                 observacoes as Observacoes 
-                            FROM Motoristas WHERE Id = @Id", 
+                            FROM Veiculos WHERE Id = @Id", 
                             new { id = veiculoId }).Single();
 
                 return result;
