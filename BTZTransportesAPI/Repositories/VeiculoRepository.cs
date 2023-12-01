@@ -42,8 +42,8 @@ namespace BTZTransportesAPI.Repositories
                 db.Open();
 
                 var query = @"SELECT id as Id,
-                                placa as Nome,
-                                nome as Placa,
+                                nome = @Nome, 
+                                placa = @Placa, 
                                 tipo_combustivel_id as TipoCombustivel,
                                 fabricante as Fabricante,
                                 ano_fabricacao as AnoFabricacao,
@@ -84,7 +84,16 @@ namespace BTZTransportesAPI.Repositories
                         SELECT CAST(SCOPE_IDENTITY() as int)";
 
                 int veiculoId = db.Query<int>(query, Veiculo).Single();
-                var result = db.Query<Veiculo>("SELECT * FROM Veiculos WHERE id = @id", new { id = veiculoId }).Single();
+                var result = db.Query<Veiculo>(@"SELECT id as Id,
+                                placa as Nome,
+                                nome as Placa,
+                                tipo_combustivel_id as TipoCombustivel,
+                                fabricante as Fabricante,
+                                ano_fabricacao as AnoFabricacao,
+                                capacidade_tanque as CapacidadeTanque,
+                                observacoes as Observacoes 
+                            FROM Motoristas WHERE Id = @Id", 
+                            new { id = veiculoId }).Single();
 
                 return result;
 
@@ -114,8 +123,8 @@ namespace BTZTransportesAPI.Repositories
                 var updatedVeiculo = db.Query<Veiculo>(@"
                 SELECT 
                     id as Id,
-                    placa as Nome,
-                    nome as Placa,
+                    nome as Nome,
+                    placa as Placa,
                     tipo_combustivel_id as TipoCombustivel,
                     fabricante as Fabricante,
                     ano_fabricacao as AnoFabricacao,
