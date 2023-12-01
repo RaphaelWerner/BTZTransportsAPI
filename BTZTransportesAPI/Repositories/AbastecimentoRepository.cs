@@ -21,7 +21,14 @@ namespace BTZTransportesAPI.Repositories
             {
                 db.Open();
 
-                var query = @"SELECT * FROM Abastecimentos";
+                var query = @"SELECT id as Id
+                                veiculo_id as VeiculoId
+                                motorista_id as MotoristaId
+                                data_abastecimento as Data
+                                tipo_combustivel_id as TipoCombustivel
+                                quantidade_abastecida as QuantidadeAbastecida
+                                valor_total as ValorTotal 
+                            FROM Abastecimentos";
                 var Abastecimentos = db.Query<Abastecimento>(query);
                 return Abastecimentos;
             }
@@ -33,7 +40,14 @@ namespace BTZTransportesAPI.Repositories
             {
                 db.Open();
 
-                var query = @"SELECT * FROM Abastecimentos WHERE id = @id";
+                var query = @"SELECT SELECT id as Id
+                                veiculo_id as VeiculoId
+                                motorista_id as MotoristaId
+                                data_abastecimento as Data
+                                tipo_combustivel_id as TipoCombustivel
+                                quantidade_abastecida as QuantidadeAbastecida
+                                valor_total as ValorTotal
+                            FROM Abastecimentos WHERE id = @id";
 
                 var Abastecimento = db.Query<Abastecimento>(query, new { id = abastecimentoId }).Single();
 
@@ -47,7 +61,7 @@ namespace BTZTransportesAPI.Repositories
                 db.Open();
 
                 var query = @"SELECT preco FROM Combustiveis WHERE id = @id";
-                var precoCombustivel = db.Query<int>(query, new { id = abastecimento.TipoCombustivel }).Single();
+                var precoCombustivel = db.Query<double>(query, new { id = abastecimento.TipoCombustivel }).Single();
 
                 abastecimento.ValorTotal = new AbastecimentoService().CalcularPrecoAbastecimento(precoCombustivel, abastecimento.QuantidadeAbastecida);
 
@@ -59,7 +73,7 @@ namespace BTZTransportesAPI.Repositories
                             data_abastecimento, 
                             tipo_combustivel_id, 
                             quantidade_abastecida,
-                            preco_total) 
+                            valor_total) 
                         VALUES (
                             @VeiculoId, 
                             @MotoristaId, 
@@ -69,17 +83,7 @@ namespace BTZTransportesAPI.Repositories
                             @ValorTotal);
                         SELECT CAST(SCOPE_IDENTITY() as int)";
 
-                var parametros = new
-                {
-                    abastecimento.VeiculoId,
-                    abastecimento.MotoristaId,
-                    abastecimento.Data,
-                    abastecimento.TipoCombustivel,
-                    abastecimento.QuantidadeAbastecida,
-                    abastecimento.ValorTotal
-            };
-
-                int abastecimentoId = db.Query<int>(query, parametros).Single();
+                int abastecimentoId = db.Query<int>(query, abastecimento).Single();
                 var result = db.Query<Abastecimento>("SELECT * FROM Abastecimentos WHERE id = @id", new { id = abastecimentoId }).Single();
 
 

@@ -18,7 +18,16 @@ namespace BTZTransportesAPI.Repositories
             {
                 db.Open();
 
-                var query = @"SELECT * FROM Veiculos";
+                var query = @"SELECT
+                                id as Id,
+                                placa as Nome,
+                                nome as Placa,
+                                tipo_combustivel_id as TipoCombustivel,
+                                fabricante as Fabricante,
+                                ano_fabricacao as AnoFabricacao,
+                                capacidade_tanque as CapacidadeTanque,
+                                observacoes as Observacoes
+                            FROM Veiculos";
                 var result = db.Query<Veiculo>(query);
                 return result;
             }
@@ -32,7 +41,15 @@ namespace BTZTransportesAPI.Repositories
             {
                 db.Open();
 
-                var query = @"SELECT * FROM Motoristas WHERE Id = @Id";
+                var query = @"SELECT id as Id,
+                                placa as Nome,
+                                nome as Placa,
+                                tipo_combustivel_id as TipoCombustivel,
+                                fabricante as Fabricante,
+                                ano_fabricacao as AnoFabricacao,
+                                capacidade_tanque as CapacidadeTanque,
+                                observacoes as Observacoes 
+                            FROM Motoristas WHERE Id = @Id";
 
                 var result = db.Query<Veiculo>(query, new { id = veiculoId }).Single();
 
@@ -94,7 +111,18 @@ namespace BTZTransportesAPI.Repositories
 
                 db.Execute(query, Veiculo);
 
-                var updatedVeiculo = db.Query<Veiculo>("SELECT * FROM Veiculos WHERE id = @id", new { id = Veiculo.Id }).SingleOrDefault();
+                var updatedVeiculo = db.Query<Veiculo>(@"
+                SELECT 
+                    id as Id,
+                    placa as Nome,
+                    nome as Placa,
+                    tipo_combustivel_id as TipoCombustivel,
+                    fabricante as Fabricante,
+                    ano_fabricacao as AnoFabricacao,
+                    capacidade_tanque as CapacidadeTanque,
+                    observacoes as Observacoes
+                FROM Veiculos WHERE id = @Id",
+                new { id = Veiculo.Id }).SingleOrDefault();
 
                 return updatedVeiculo;
             }

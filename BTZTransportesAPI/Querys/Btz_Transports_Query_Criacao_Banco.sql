@@ -58,6 +58,7 @@ CREATE TABLE Abastecimentos (
     data_abastecimento DATE NOT NULL,
     tipo_combustivel_id INT NOT NULL,
     quantidade_abastecida DECIMAL(10, 2) NOT NULL,
+    valor_total DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (veiculo_id) REFERENCES veiculos(id),
     FOREIGN KEY (motorista_id) REFERENCES motoristas(id),
     FOREIGN KEY (tipo_combustivel_id) REFERENCES combustiveis(id)

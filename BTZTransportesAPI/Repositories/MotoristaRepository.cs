@@ -22,7 +22,15 @@ namespace BTZTransportesAPI.Repositories
             {
                 db.Open();
 
-                var query = @"SELECT * FROM Motoristas";
+                var query = @"SELECT
+                                id as Id,
+                                nome as Nome,
+                                cpf as CPF,
+                                numeroCNH as NumeroCNH,
+                                categoriaCNH_id as CategoriaCNH,
+                                data_nascimento as DataNascimento,
+                                status as Status                               
+                            FROM Motoristas";
                 var motoristas = db.Query<Motorista>(query);
                 return motoristas;
             }
@@ -35,7 +43,15 @@ namespace BTZTransportesAPI.Repositories
             {
                 db.Open();
 
-                var query = @"SELECT * FROM Motoristas WHERE Id = @Id";
+                var query = @"SELECT
+                                id as Id,
+                                nome as Nome,
+                                cpf as CPF,
+                                numeroCNH as NumeroCNH,
+                                categoriaCNH_id as CategoriaCNH,
+                                data_nascimento as DataNascimento,
+                                status as Status   
+                            FROM Motoristas WHERE Id = @Id";
 
                 var Motorista = db.Query<Motorista>(query,new { id = motoristaId }).SingleOrDefault();
 
@@ -93,7 +109,17 @@ namespace BTZTransportesAPI.Repositories
 
                     db.Execute(query, Motorista);
 
-                    var updatedMotorista = db.Query<Motorista>("SELECT * FROM Motoristas WHERE id = @id", new { id = Motorista.Id }).SingleOrDefault();
+                    var updatedMotorista = db.Query<Motorista>(@"
+                    SELECT
+                        id as Id,
+                        nome as Nome,
+                        cpf as CPF,
+                        numeroCNH as NumeroCNH,
+                        categoriaCNH_id as CategoriaCNH,
+                        data_nascimento as DataNascimento,
+                        status as Status   
+                    FROM Motoristas WHERE id = @id", 
+                    new { id = Motorista.Id }).SingleOrDefault();
 
                     return updatedMotorista;
                 }

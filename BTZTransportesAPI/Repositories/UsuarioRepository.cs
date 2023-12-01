@@ -18,7 +18,7 @@ namespace BTZTransportesAPI.Repositories
                 db.Open();
                 var query = @"SELECT * FROM Usuarios WHERE usuario = @usuario and senha = @senha";
 
-                var id = db.QueryFirstOrDefault<int?>(query, new { usuario = usuario, senha = senha });
+                var id = db.QueryFirstOrDefault<int?>(query, new { usuario, senha });
 
                 if (id != null)
                     return true;
