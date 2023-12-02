@@ -8,7 +8,7 @@ namespace BTZTransportesAPI.Models
 {
     public class Abastecimento
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public required int VeiculoId { get; set; }
         public required int MotoristaId { get; set; }
         public DateTime Data { get; set; }

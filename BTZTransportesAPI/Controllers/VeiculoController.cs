@@ -47,13 +47,10 @@ namespace BTZTransportesAPI.Controllers
         {
             try
             {
-                if (veiculo.Id == 0)
-                    ModelState.AddModelError("id", "id nulo");
-
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var result = _veiculoRepository.EditVeiculo(veiculo);
+                var result = _veiculoRepository.RegisterVeiculo(veiculo);
                 return Ok(result);
 
             }

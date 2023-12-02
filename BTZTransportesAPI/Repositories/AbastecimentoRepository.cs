@@ -66,10 +66,9 @@ namespace BTZTransportesAPI.Repositories
                 abastecimento.ValorTotal = new AbastecimentoService().CalcularPrecoAbastecimento(precoCombustivel, abastecimento.QuantidadeAbastecida);
 
                 query = @"
-                        INSERT INTO Abastecimento (
+                        INSERT INTO Abastecimentos (
                             veiculo_id, 
                             motorista_id,
-                            NumeroCNH, 
                             data_abastecimento, 
                             tipo_combustivel_id, 
                             quantidade_abastecida,
@@ -84,7 +83,14 @@ namespace BTZTransportesAPI.Repositories
                         SELECT CAST(SCOPE_IDENTITY() as int)";
 
                 int abastecimentoId = db.Query<int>(query, abastecimento).Single();
-                var result = db.Query<Abastecimento>("SELECT * FROM Abastecimentos WHERE id = @id", new { id = abastecimentoId }).Single();
+                var result = db.Query<Abastecimento>(@"SELECT SELECT id as Id
+                                veiculo_id as VeiculoId
+                                motorista_id as MotoristaId
+                                data_abastecimento as Data
+                                tipo_combustivel_id as TipoCombustivel
+                                quantidade_abastecida as QuantidadeAbastecida
+                                valor_total as ValorTotal ", 
+                                new { id = abastecimentoId }).Single();
 
 
                 return result;

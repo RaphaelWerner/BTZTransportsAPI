@@ -20,8 +20,8 @@ namespace BTZTransportesAPI.Repositories
 
                 var query = @"SELECT
                                 id as Id,
-                                placa as Nome,
-                                nome as Placa,
+                                nome as Nome,
+                                placa as Placa,                               
                                 tipo_combustivel_id as TipoCombustivel,
                                 fabricante as Fabricante,
                                 ano_fabricacao as AnoFabricacao,
@@ -42,14 +42,14 @@ namespace BTZTransportesAPI.Repositories
                 db.Open();
 
                 var query = @"SELECT id as Id,
-                                nome = @Nome, 
-                                placa = @Placa, 
+                                nome as Nome, 
+                                placa as Placa, 
                                 tipo_combustivel_id as TipoCombustivel,
                                 fabricante as Fabricante,
                                 ano_fabricacao as AnoFabricacao,
                                 capacidade_tanque as CapacidadeTanque,
                                 observacoes as Observacoes 
-                            FROM Motoristas WHERE Id = @Id";
+                            FROM Veiculos WHERE Id = @Id";
 
                 var result = db.Query<Veiculo>(query, new { id = veiculoId }).Single();
 

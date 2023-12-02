@@ -4,7 +4,8 @@
     {
         public double CalcularPrecoAbastecimento(double preco, double quantidade)
         {
-            return 0;
+
+            return preco * quantidade;
         }
 
 
