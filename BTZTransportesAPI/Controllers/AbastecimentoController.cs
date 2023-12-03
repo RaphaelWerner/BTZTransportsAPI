@@ -1,4 +1,4 @@
-﻿using BTZTransportesAPI.Models;
+﻿using BTZTransportesAPI.Models.Abastecimento;
 using BTZTransportesAPI.Repositories;
 using BTZTransportesAPI.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -14,8 +14,25 @@ namespace BTZTransportesAPI.Controllers
         private readonly IAbastecimentoRepository _abastecimentoRepository;
         public AbastecimentoController(IAbastecimentoRepository abastecimentoRepository) => _abastecimentoRepository = abastecimentoRepository;
 
+
+        [HttpGet]
+        public ActionResult<IEnumerable<AbastecimentoRequest>> GetAbastecimentos()
+        {
+            try
+            {
+                var result = _abastecimentoRepository.GetAbastecimentos();
+                return Ok(result);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
         [HttpPost]
-        public ActionResult<Abastecimento> RegisterAbastecimento([FromBody] Abastecimento abastecimento)
+        public ActionResult<AbastecimentoRequest> RegisterAbastecimento([FromBody] AbastecimentoRequest abastecimento)
         {
             try
             {

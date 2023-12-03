@@ -1,8 +1,8 @@
-﻿using BTZTransportesAPI.Models;
-using BTZTransportesAPI.Repositories.Interfaces;
+﻿using BTZTransportesAPI.Repositories.Interfaces;
 using System.Data.SqlClient;
 using System.Data;
 using Dapper;
+using BTZTransportesAPI.Models;
 
 namespace BTZTransportesAPI.Repositories
 {

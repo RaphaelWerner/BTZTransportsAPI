@@ -1,10 +1,10 @@
-﻿using BTZTransportesAPI.Models;
-using BTZTransportesAPI.Repositories.Interfaces;
+﻿using BTZTransportesAPI.Repositories.Interfaces;
 using BTZTransportesAPI.Services;
 using System.Data.SqlClient;
 using System.Data;
 using Dapper;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using BTZTransportesAPI.Models.Abastecimento;
 
 namespace BTZTransportesAPI.Repositories
 {
@@ -15,26 +15,30 @@ namespace BTZTransportesAPI.Repositories
             _connectionString = configuration.GetConnectionString("DefautConnection");
 
 
-        public IEnumerable<Abastecimento> GetAbastecimentos()
+        public IEnumerable<AbastecimentoResponse> GetAbastecimentos()
         {
             using (IDbConnection db = new SqlConnection(_connectionString))
             {
                 db.Open();
 
-                var query = @"SELECT id as Id
-                                veiculo_id as VeiculoId
-                                motorista_id as MotoristaId
-                                data_abastecimento as Data
-                                tipo_combustivel_id as TipoCombustivel
-                                quantidade_abastecida as QuantidadeAbastecida
-                                valor_total as ValorTotal 
-                            FROM Abastecimentos";
-                var Abastecimentos = db.Query<Abastecimento>(query);
+                var query = @"SELECT 
+                                A.id as Id,
+                                V.nome as VeiculoNome, 
+                                M.nome as MotoristaNome, 
+                                data_abastecimento as Data, 
+                                C.tipo as TipoCombustivel, 
+                                quantidade_abastecida as QuantidadeAbastecida, 
+                                valor_total as ValorTotal
+                            from Abastecimentos A
+                            inner join Motoristas M on M.id = A.motorista_id
+                            inner join Veiculos V on V.id = A.veiculo_id
+                            inner join Combustiveis C on C.id = A.tipo_combustivel_id";
+                var Abastecimentos = db.Query<AbastecimentoResponse>(query);
                 return Abastecimentos;
             }
         }
 
-        public Abastecimento GetAbastecimentoById(int abastecimentoId)
+        public AbastecimentoResponse GetAbastecimentoById(int abastecimentoId)
         {
             using (IDbConnection db = new SqlConnection(_connectionString))
             {
@@ -49,12 +53,12 @@ namespace BTZTransportesAPI.Repositories
                                 valor_total as ValorTotal
                             FROM Abastecimentos WHERE id = @id";
 
-                var Abastecimento = db.Query<Abastecimento>(query, new { id = abastecimentoId }).Single();
+                var Abastecimento = db.Query<AbastecimentoResponse>(query, new { id = abastecimentoId }).Single();
 
                 return Abastecimento;
             }
         }
-        public Abastecimento RegisterAbastecimento(Abastecimento abastecimento)
+        public AbastecimentoResponse RegisterAbastecimento(AbastecimentoRequest abastecimento)
         {
             using (IDbConnection db = new SqlConnection(_connectionString))
             {
@@ -83,14 +87,20 @@ namespace BTZTransportesAPI.Repositories
                         SELECT CAST(SCOPE_IDENTITY() as int)";
 
                 int abastecimentoId = db.Query<int>(query, abastecimento).Single();
-                var result = db.Query<Abastecimento>(@"SELECT SELECT id as Id
-                                veiculo_id as VeiculoId
-                                motorista_id as MotoristaId
-                                data_abastecimento as Data
-                                tipo_combustivel_id as TipoCombustivel
-                                quantidade_abastecida as QuantidadeAbastecida
-                                valor_total as ValorTotal ", 
-                                new { id = abastecimentoId }).Single();
+
+                query = @"SELECT 
+                            A.id as Id,
+                            V.nome as VeiculoNome, 
+                            M.nome as MotoristaNome, 
+                            data_abastecimento as Data, 
+                            C.tipo as TipoCombustivel, 
+                            quantidade_abastecida as QuantidadeAbastecida, 
+                            valor_total as ValorTotal
+                        from Abastecimentos A
+                        inner join Motoristas M on M.id = A.motorista_id
+                        inner join Veiculos V on V.id = A.veiculo_id
+                        inner join Combustiveis C on C.id = A.tipo_combustivel_id";
+                var result = db.Query<AbastecimentoResponse>(query, new { id = abastecimentoId }).Single();
 
 
                 return result;

@@ -4,11 +4,10 @@ using BTZTransportesAPI.Repositories.Interfaces;
 using Microsoft.AspNetCore.Server.IIS.Core;
 using System.ComponentModel.DataAnnotations;
 
-namespace BTZTransportesAPI.Models
+namespace BTZTransportesAPI.Models.Abastecimento
 {
-    public class Abastecimento
+    public class AbastecimentoRequest
     {
-        public int? Id { get; set; }
         public required int VeiculoId { get; set; }
         public required int MotoristaId { get; set; }
         public DateTime Data { get; set; }
@@ -18,15 +17,14 @@ namespace BTZTransportesAPI.Models
 
         [MenorOuIgualTamanhoTanque(ErrorMessage = "Quantidade maior que a capacidade do tanque.")]
         public double QuantidadeAbastecida { get; set; }
-
-        public double? ValorTotal { get; set; }
+        public double ValorTotal { get; set; }
 
 
         private class CombustivelAdequado : ValidationAttribute
         {
             protected override ValidationResult IsValid(object value, ValidationContext validationContext)
             {
-                var abastecimento = (Abastecimento)validationContext.ObjectInstance;
+                var abastecimento = (AbastecimentoRequest)validationContext.ObjectInstance;
 
                 var serviceProvider = validationContext.GetService(typeof(IServiceProvider)) as IServiceProvider;
                 var veiculoRepository = serviceProvider.GetService(typeof(IVeiculoRepository)) as IVeiculoRepository;
@@ -45,7 +43,7 @@ namespace BTZTransportesAPI.Models
         {
             protected override ValidationResult IsValid(object value, ValidationContext validationContext)
             {
-                var abastecimento = (Abastecimento)validationContext.ObjectInstance;
+                var abastecimento = (AbastecimentoRequest)validationContext.ObjectInstance;
 
                 var serviceProvider = validationContext.GetService(typeof(IServiceProvider)) as IServiceProvider;
                 var veiculoRepository = serviceProvider.GetService(typeof(IVeiculoRepository)) as IVeiculoRepository;
